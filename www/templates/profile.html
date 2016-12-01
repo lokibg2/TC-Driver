@@ -1,0 +1,23 @@
+<ion-view title="Profile" id="page4">
+  <ion-content padding="true" class="has-header">
+    <div class="list card" id="profile-card24">
+      <ion-item class="dark" id="profile-list-item10">{{currUser.displayName}}</ion-item>
+      <div class=" item item-image">
+        <img ng-src="{{currUser.photoURL || 'img/profile.jpg'}}"
+             style="display: block; width: 100%; height: auto; margin-left: auto; margin-right: auto;">
+      </div>
+      <ion-item class="item-icon-left calm" id="profile-list-item11">
+        <i class="icon ion-email"></i>{{currUser.email}}
+      </ion-item>
+      <ion-item class="item-icon-left royal" id="profile-list-item13 ">
+        <i class="icon ion-android-phone-portrait"></i>{{currUser.phone}}
+      </ion-item>
+      <ion-item class="item-icon-left assertive" id="profile-list-item14">
+        <i class="icon ion-information-circled"></i>{{currUser.type}} Driver
+      </ion-item>
+      <ion-item class="item-icon-left positive" id="profile-list-item12">
+        <i class="icon ion-android-warning"></i>{{currUser.count || 1}} Crises Assigned
+      </ion-item>
+    </div>
+  </ion-content>
+</ion-view>
