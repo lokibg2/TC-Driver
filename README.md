@@ -1,25 +1,20 @@
-Ionic App Base
+# Emergency Responder
 =====================
+### Features
 
-A starting project for Ionic that optionally supports using custom SCSS.
+* Driver End
+* Works on Android and iOS
+* Ionic Design
+* Realtime Sync
+* Receives Alerts
+* Realtime Maps & Tracking
 
-## Using this project
+### Home
 
-We recommend using the [Ionic CLI](https://github.com/driftyco/ionic-cli) to create new Ionic projects that are based on this project but use a ready-made starter template.
+<img width="837" alt="driver-home" src="https://cloud.githubusercontent.com/assets/10046561/20808558/0d155500-b829-11e6-912b-257914dbf1f7.png">
 
-For example, to start a new Ionic project with the default tabs interface, make sure the `ionic` utility is installed:
+### Map
+<img width="829" alt="driver-map" src="https://cloud.githubusercontent.com/assets/10046561/20808556/0ca80306-b829-11e6-8ce4-9bc7cc2775c1.png">
 
-```bash
-$ npm install -g ionic
-```
-
-Then run: 
-
-```bash
-$ ionic start myProject tabs
-```
-
-More info on this can be found on the Ionic [Getting Started](http://ionicframework.com/getting-started) page and the [Ionic CLI](https://github.com/driftyco/ionic-cli) repo.
-
-## Issues
-Issues have been disabled on this repo, if you do find an issue or have a question consider posting it on the [Ionic Forum](http://forum.ionicframework.com/).  Or else if there is truly an error, follow our guidelines for [submitting an issue](http://ionicframework.com/submit-issue/) to the main Ionic repository.
+### Profile
+<img width="823" alt="driver-profile" src="https://cloud.githubusercontent.com/assets/10046561/20808557/0cec93d6-b829-11e6-9cf9-b1cb823738c4.png">
