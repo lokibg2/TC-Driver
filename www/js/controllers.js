@@ -1,7 +1,7 @@
 angular.module('app.controllers', [])
 
-  .controller('homeCtrl', ['$scope', '$stateParams', '$rootScope', '$cordovaLaunchNavigator', '$ionicPlatform', 'userService',
-    function ($scope, $stateParams, $rootScope, $cordovaLaunchNavigator, $ionicPlatform, userService) {
+  .controller('homeCtrl', ['$scope', '$state', '$stateParams', '$rootScope', '$cordovaLaunchNavigator', '$ionicPlatform', 'userService',
+    function ($scope, $state, $stateParams, $rootScope, $cordovaLaunchNavigator, $ionicPlatform, userService) {
       $scope.currUser = userService.user;
       $scope.launchNavigator = function () {
         console.log("HELLO!");
@@ -41,7 +41,6 @@ angular.module('app.controllers', [])
           console.log(userService.user.lat);
           console.log(userService.user.lng);
 
-
           // Must signal completion of your callbackFn.
           bgGeo.finish(taskId);
         };
@@ -49,7 +48,7 @@ angular.module('app.controllers', [])
         // This callback will be executed if a location-error occurs.  Eg: this will be called if user disables location-services.
         var failureFn = function (errorCode) {
           console.warn('- BackgroundGeoLocation error: ', errorCode);
-        }
+        };
 
         // Listen to location events & errors.
         bgGeo.on('location', callbackFn, failureFn);
@@ -111,5 +110,25 @@ angular.module('app.controllers', [])
 
   .controller('profileCtrl', ['$scope', '$stateParams', '$rootScope', 'userService',
     function ($scope, $stateParams, $rootScope, userService) {
-      $scope.currUser = userService;
+
+      $scope.currUser = userService.user;
+    }])
+  .controller('loginCtrl', ['$scope', '$stateParams', '$state', 'userService',
+    function ($scope, $stateParams, $state, userService) {
+      $scope.user = {};
+      firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+          userService.user = user;
+          $state.go('tabsController.home');
+          console.log(user);
+        } else {
+
+        }
+      });
+
+      $scope.login = () => {
+        firebase.auth().signInWithEmailAndPassword($scope.user.email, $scope.user.password).catch(function (error) {
+          console.log(error);
+        });
+      }
     }]);

@@ -1,0 +1,20 @@
+<ion-view title="Login" id="page10" ng-controller="loginCtrl" hide-back-button="true">
+  <ion-content padding="true" class="has-header">
+    <div class="spacer" style="height: 40px;"></div>
+    <form id="login-form9" class="list">
+      <h3 id="login-heading1" style="color:#790101;font-weight:600;text-align:center;">Time to respond</h3>
+      <ion-list id="login-list2">
+        <label class="item item-input" id="login-input8">
+          <input type="email" placeholder="E-mail ID" ng-model="user.email">
+        </label>
+        <label class="item item-input" id="login-input9">
+          <input type="password" placeholder="Password" ng-model="user.password">
+        </label>
+      </ion-list>
+      <div class="spacer" style="height: 40px;"></div>
+      <a id="login-button3" class="button button-stable  button-block" ng-click="login()">Log in</a>
+
+      <ion-label>{{err}}</ion-label>
+    </form>
+  </ion-content>
+</ion-view>
