@@ -20,16 +20,16 @@
           <div class="row">
             <div class="col">
               <button id="home-button11" class="button button-balanced  button-block"
-                      ng-click="launchNavigator()">Available
+                      ng-click="updateStatus(0)">Available
               </button>
             </div>
             <div class="col">
-              <button id="home-button12" class="button button-energized  button-block" ui-sref="login">
+              <button id="home-button12" class="button button-energized  button-block" ng-click="updateStatus(1)" >
                 Busy
               </button>
             </div>
             <div class="col">
-              <button id="home-button13" class="button button-assertive button-block" ui-sref="tC.alert">Offline
+              <button id="home-button13" class="button button-assertive button-block" ng-click="updateStatus(2)" >Offline
               </button>
             </div>
           </div>

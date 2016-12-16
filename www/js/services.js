@@ -2,9 +2,11 @@ angular.module('app.services', [])
 
 
   .service('userService', ['$state', function ($state) {
+    let $this = this;
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
-        this.user = user;
+        $this.user = user;
+        console.log($this.user);
         $state.go('tabsController.home');
       }
     });

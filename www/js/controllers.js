@@ -2,19 +2,35 @@ angular.module('app.controllers', [])
 
   .controller('homeCtrl', ['$scope', '$state', '$stateParams', '$rootScope', '$cordovaLaunchNavigator', '$ionicPlatform', 'userService',
     function ($scope, $state, $stateParams, $rootScope, $cordovaLaunchNavigator, $ionicPlatform, userService) {
+    console.log("Hello!");
+      console.log(userService.user);
+      if(userService.user && userService.user.uid){
+        $scope.currUser = userService.user;
+        console.log(userService.user);
+        $scope.updateStatus = (id) => {
 
-      $scope.currUser = userService.user;
-      $scope.launchNavigator = function () {
-        console.log("HELLO!");
-        var destination = [13.082, 80.270];
-        $ionicPlatform.ready(() => {
-          $cordovaLaunchNavigator.navigate(destination, null).then(function () {
-            console.log("Navigator launched");
-          }, function (err) {
-            console.error(err);
+          let countRef = firebase.database().ref(`drivers/${userService.user.uid}/status`);
+          countRef.transaction(function (current_value) {
+            return id;
           });
-        });
-      };
+          console.log("Done");
+        };
+
+        $scope.launchNavigator = function () {
+          console.log("HELLO!");
+          var destination = [13.082, 80.270];
+          $ionicPlatform.ready(() => {
+            $cordovaLaunchNavigator.navigate(destination, null).then(function () {
+              console.log("Navigator launched");
+            }, function (err) {
+              console.error(err);
+            });
+          });
+        };
+      }else{
+        $state.go('login');
+      }
+
     }])
 
   .controller('mapCtrl', ['$scope', '$stateParams', '$rootScope', '$ionicLoading', 'userService',
