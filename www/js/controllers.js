@@ -2,6 +2,7 @@ angular.module('app.controllers', [])
 
   .controller('homeCtrl', ['$scope', '$state', '$stateParams', '$rootScope', '$cordovaLaunchNavigator', '$ionicPlatform', 'userService',
     function ($scope, $state, $stateParams, $rootScope, $cordovaLaunchNavigator, $ionicPlatform, userService) {
+
       $scope.currUser = userService.user;
       $scope.launchNavigator = function () {
         console.log("HELLO!");
@@ -108,27 +109,28 @@ angular.module('app.controllers', [])
 
     }])
 
-  .controller('profileCtrl', ['$scope', '$stateParams', '$rootScope', 'userService',
-    function ($scope, $stateParams, $rootScope, userService) {
-
+  .controller('profileCtrl', ['$scope', '$stateParams', '$rootScope', 'userService', '$state',
+    function ($scope, $stateParams, $rootScope, userService, $state) {
       $scope.currUser = userService.user;
+      $scope.logout = () => {
+        firebase.auth().signOut().then(() => {
+          $scope.currUser = undefined;
+          $state.go('login');
+          userService.user = undefined;
+        }, (error) => {
+          console.log(error);
+        })
+      };
     }])
   .controller('loginCtrl', ['$scope', '$stateParams', '$state', 'userService',
     function ($scope, $stateParams, $state, userService) {
       $scope.user = {};
-      firebase.auth().onAuthStateChanged(function (user) {
-        if (user) {
-          userService.user = user;
-          $state.go('tabsController.home');
-          console.log(user);
-        } else {
 
-        }
-      });
 
       $scope.login = () => {
         firebase.auth().signInWithEmailAndPassword($scope.user.email, $scope.user.password).catch(function (error) {
           console.log(error);
         });
+
       }
     }]);

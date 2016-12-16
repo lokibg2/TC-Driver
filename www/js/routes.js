@@ -51,7 +51,7 @@ angular.module('app.routes', [])
       })
 
 
-    $urlRouterProvider.otherwise('/page1/home');
+    $urlRouterProvider.otherwise('/login');
 
 
   });
