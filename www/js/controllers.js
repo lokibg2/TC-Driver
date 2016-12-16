@@ -1,35 +1,63 @@
 angular.module('app.controllers', [])
 
-  .controller('homeCtrl', ['$scope', '$state', '$stateParams', '$rootScope', '$cordovaLaunchNavigator', '$ionicPlatform', 'userService',
-    function ($scope, $state, $stateParams, $rootScope, $cordovaLaunchNavigator, $ionicPlatform, userService) {
-    console.log("Hello!");
-      console.log(userService.user);
-      if(userService.user && userService.user.uid){
-        $scope.currUser = userService.user;
-        console.log(userService.user);
-        $scope.updateStatus = (id) => {
-
-          let countRef = firebase.database().ref(`drivers/${userService.user.uid}/status`);
-          countRef.transaction(function (current_value) {
-            return id;
-          });
-          console.log("Done");
-        };
-
-        $scope.launchNavigator = function () {
-          console.log("HELLO!");
-          var destination = [13.082, 80.270];
-          $ionicPlatform.ready(() => {
-            $cordovaLaunchNavigator.navigate(destination, null).then(function () {
-              console.log("Navigator launched");
-            }, function (err) {
-              console.error(err);
+  .controller('homeCtrl', ['$scope', '$state', '$stateParams', '$rootScope', '$cordovaLaunchNavigator', '$ionicPlatform', 'userService', '$cordovaGeolocation',
+    function ($scope, $state, $stateParams, $rootScope, $cordovaLaunchNavigator, $ionicPlatform, userService, $cordovaGeolocation) {
+      firebase.auth().onAuthStateChanged(function (user) {
+        console.log(user);
+        if (user) {
+          userService.user = user;
+          $scope.currUser = userService.user;
+          $scope.state = 1;
+          $scope.updateStatus = (id) => {
+            $scope.state = !id;
+            let countRef = firebase.database().ref(`drivers/${userService.user.uid}/status`);
+            countRef.transaction(function (current_value) {
+              return id;
             });
-          });
-        };
-      }else{
-        $state.go('login');
-      }
+            let firebaseRef = firebase.database().ref(`geoLoc/${id}`);
+            let geoFire = new GeoFire(firebaseRef);
+            let firebaseRef1 = firebase.database().ref(`geoLoc/${id == 1 ? 0 : 1}`);
+            let geoFire1 = new GeoFire(firebaseRef1);
+            var posOptions = {timeout: 15000, enableHighAccuracy: false};
+            $cordovaGeolocation
+              .getCurrentPosition(posOptions)
+              .then(function (position) {
+                var latitude = position.coords.latitude;
+                var longitude = position.coords.longitude;
+                var username = userService.user.uid;
+                geoFire1.get(username).then(function (location) {
+                  if (location !== null) {
+                    geoFire1.remove(username)
+                  }
+                }, function (error) {
+                  console.log("Error: " + error);
+                });
+                geoFire.set(username, [latitude, longitude]).then(function () {
+                  console.log("Updated");
+                }).catch(function (error) {
+                  console.log("Error adding user " + username + "'s location to GeoFire");
+                });
+              }, function (err) {
+                console.log(err)
+              });
+          };
+
+          $scope.launchNavigator = function () {
+            console.log("HELLO!");
+            var destination = [13.082, 80.270];
+            $ionicPlatform.ready(() => {
+              $cordovaLaunchNavigator.navigate(destination, null).then(function () {
+                console.log("Navigator launched");
+              }, function (err) {
+                console.error(err);
+              });
+            });
+          };
+        } else {
+          $state.go('login');
+        }
+      });
+
 
     }])
 
@@ -141,7 +169,12 @@ angular.module('app.controllers', [])
   .controller('loginCtrl', ['$scope', '$stateParams', '$state', 'userService',
     function ($scope, $stateParams, $state, userService) {
       $scope.user = {};
-
+      firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+          userService.user = user;
+          $state.go('tabsController.home');
+        }
+      });
 
       $scope.login = () => {
         firebase.auth().signInWithEmailAndPassword($scope.user.email, $scope.user.password).catch(function (error) {
